@@ -5,12 +5,13 @@ var originalSet = [];
 var newSet = [];
 var maxClicks = 25;
 Products.clicks = 0;
+Products.viewed = 0;
+var picture = document.getElementById('productList');
 
 // constructor
 function Products(name, filePath) {
   this.name = name;
   this.filePath = filePath;
-  this.viewed = 0;
   allProducts.push(this);
 }
 // new products to add to Array
@@ -57,3 +58,14 @@ function randomProducts() {
   originalSet = newSet;
   console.log('original set', originalSet);
 }
+function renderProduct(){
+  randomProducts();
+  for (var i = 0; i < newSet.length; i++){
+    var imgEl = document.createElement('img');
+    imgEl.src = newSet[i].filepath;
+    imgEl.id = newSet[i].name;
+    picture.appendChild(imgEl);
+    newSet[i] += viewed;
+  }
+}
+renderProduct();
