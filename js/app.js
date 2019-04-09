@@ -34,3 +34,10 @@ new Products('unicorn','img/assets/unicorn.jpg');
 new Products('usb','img/assets/usb.jpg');
 new Products('water-can','img/assets/water-can.jpg');
 new Products('wine-glass','img/assets/wine-glass.jpg');
+
+// random product generator
+
+function randomProduct(){
+  var randomNumber = Math.floor(Math.random() * allProducts.length);
+  console.log('random', randomNumber);
+}
