@@ -62,7 +62,7 @@ function renderProduct() {
   for (var i = 0; i < newSet.length; i++) {
     var imgEl = document.createElement('img');
     imgEl.src = newSet[i].filePath;
-    imgEl.id = newSet[i].name;
+    imgEl.alt = newSet[i].name;
     picture.appendChild(imgEl);
     newSet[i].viewed++;
     console.log(newSet[i].filePath);
@@ -73,9 +73,9 @@ function renderProduct() {
 function clickedProduct(event) {
 
   for (var i = 0; i < newSet.length; i++) {
-    if (event.target.id === newSet[i].name) {
-      newSet[i].clicks++;
-      clicksTotal ++;
+    if (event.target.alt === newSet[i].name) {
+      newSet[i].clicks++; //adds click to the product
+      clicksTotal ++; //add to the total number of clicks
       randomProducts();
       renderProduct();
     }
@@ -87,3 +87,12 @@ function clickedProduct(event) {
 randomProducts();
 renderProduct();
 picture.addEventListener('click', clickedProduct);
+
+var contents = document.getElementById('clickChart').getContext(2D);
+var clickChart = new Chart(contents, {
+  type: 'bar',
+  data: {
+    
+  }
+}
+  )
