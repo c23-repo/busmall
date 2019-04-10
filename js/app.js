@@ -81,43 +81,68 @@ function clickedProduct(event) {
     }
     if (clicksTotal === 25) {
       picture.removeEventListener('click', clickedProduct);
+      populateChart();
+      stats();
     }
   }
 }
 randomProducts();
 renderProduct();
 
-// new variable to hold info from object for the chart.
-var items = [];
-var clicks = [];
+function populateChart(){
+  // new variable to hold info from object for the chart.
+  var items = [];
+  var clicks = [];
 
-// loop to populate the array
-for (var i = 0; i < allProducts.length; i++) {
-  items[i] = allProducts[i].name;
-  clicks[i] = allProducts[i].clicks;
+  // loop to populate the array
+  for (var i = 0; i < allProducts.length; i++) {
+    items[i] = allProducts[i].name;
+    clicks[i] = allProducts[i].clicks;
+  }
+  // the following is from chart.js
+  console.log(items, 'items');
+  console.log(clicks, 'clicks');
+  var ctx = document.getElementById('clickChart').getContext('2d');
+  clickChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: items,
+      datasets: [{
+        label: 'Preferred Products',
+        data: clicks,
+        backgroundColor: 'blue',
+        borderColor: 'orange'
+      }]
+    },
+    // options: {}
+  });
+  console.log('checking the number of clicks', clicks);
 }
-// the following is from chart.js
 
-var ctx = document.getElementById('clickChart').getContext('2d');
-clickChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: items,
-    datasets: [{
-      label: 'Preferred Products',
-      data: clicks,
-      backgroundColor: 'blue',
-      borderColor: 'orange'
-    }]
-  },
-  // options: {}
-});
-console.log('checking the number of clicks', clicks)
+function stats(){
+  var prodStats = [];
+  var string;
+  var ulEl = document.getElementById('list');
+  for (var i = 0; i < allProducts.length; i++){
+    var clicked = allProducts[i].clicks;
+    var view = allProducts[i].viewed;
+    var item = allProducts[i].name;
+    var percent = Math.floor((clicked / view) * 100);
+    string = (`${item} was viewed ${view} times and was clicked on ${clicked} times. It had a selection rate of ${percent}%`);
+    prodStats.push(string);
+  }
+  for (var x = 0; x < prodStats.length; x++) {
+    // populates list
+    var liEL = document.createElement('li');
+    liEL.textContent = prodStats[x];
+    ulEl.appendChild(liEL);
+  }
+}
 
 
 picture.addEventListener('click', clickedProduct);
 
-document.getElementById('clickChart').addEventListener(clicksTotal, function (event) {
+document.getElementById('clickChart').addEventListener(clicksTotal, function(event) {
   if (event.target.clicksTotal === 25) {
     clickChart.update();
   }
