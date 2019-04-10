@@ -5,7 +5,7 @@ var originalSet = [];
 var newSet = [];
 var clicksTotal = 0;
 var picture = document.getElementById('productList');
-
+var clickChart;
 
 // constructor
 function Products(name, filePath) {
@@ -49,7 +49,7 @@ function randomProducts() {
     console.log('random', randomNumber);
 
     // if to store the random selection into array and prevent duplicates.
-    while(newSet.includes(allProducts[randomNumber]) || originalSet.includes(allProducts[randomNumber])) {
+    while (newSet.includes(allProducts[randomNumber]) || originalSet.includes(allProducts[randomNumber])) {
       randomNumber = Math.floor(Math.random() * allProducts.length);
     }
     newSet.push(allProducts[randomNumber]);
@@ -75,7 +75,7 @@ function clickedProduct(event) {
   for (var i = 0; i < newSet.length; i++) {
     if (event.target.alt === newSet[i].name) {
       newSet[i].clicks++; //adds click to the product
-      clicksTotal ++; //add to the total number of clicks
+      clicksTotal++; //add to the total number of clicks
       randomProducts();
       renderProduct();
     }
@@ -86,13 +86,40 @@ function clickedProduct(event) {
 }
 randomProducts();
 renderProduct();
-picture.addEventListener('click', clickedProduct);
 
-var contents = document.getElementById('clickChart').getContext(2D);
-var clickChart = new Chart(contents, {
+// new variable to hold info from object for the chart.
+var items = [];
+var clicks = [];
+
+// loop to populate the array
+for (var i = 0; i < allProducts.length; i++) {
+  items[i] = allProducts[i].name;
+  clicks[i] = allProducts[i].clicks;
+}
+// the following is from chart.js
+
+var ctx = document.getElementById('clickChart').getContext('2d');
+clickChart = new Chart(ctx, {
   type: 'bar',
   data: {
-    
+    labels: items,
+    datasets: [{
+      label: 'Preferred Products',
+      data: clicks,
+      backgroundColor: 'blue',
+      borderColor: 'orange'
+    }]
+  },
+  // options: {}
+});
+console.log('checking the number of clicks', clicks)
+
+
+picture.addEventListener('click', clickedProduct);
+
+document.getElementById('clickChart').addEventListener(clicksTotal, function (event) {
+  if (event.target.clicksTotal === 25) {
+    clickChart.update();
   }
-}
-  )
+});
+console.log('this is a click end', clickChart);
