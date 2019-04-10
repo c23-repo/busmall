@@ -81,38 +81,48 @@ function clickedProduct(event) {
     }
     if (clicksTotal === 25) {
       picture.removeEventListener('click', clickedProduct);
+      populateChart();
     }
   }
 }
 randomProducts();
 renderProduct();
 
-// new variable to hold info from object for the chart.
-var items = [];
-var clicks = [];
+function populateChart() {
+  // new variable to hold info from object for the chart.
+  var items = [];
+  var clicks = [];
 
-// loop to populate the array
-for (var i = 0; i < allProducts.length; i++) {
-  items[i] = allProducts[i].name;
-  clicks[i] = allProducts[i].clicks;
+  // loop to populate the array
+  for (var i = 0; i < allProducts.length; i++) {
+    items[i] = allProducts[i].name;
+    clicks[i] = allProducts[i].clicks;
+  }
+  // the following is from chart.js
+  console.log(items, 'items');
+  console.log(clicks, 'clicks');
+  var ctx = document.getElementById('clickChart').getContext('2d');
+  clickChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: items,
+      datasets: [{
+        label: 'Preferred Products',
+        data: clicks,
+        backgroundColor: 'blue',
+        borderColor: 'orange'
+      }]
+    },
+    // options: {}
+  });
+  console.log('checking the number of clicks', clicks);
 }
-// the following is from chart.js
 
-var ctx = document.getElementById('clickChart').getContext('2d');
-clickChart = new Chart(ctx, {
-  type: 'bar',
-  data: {
-    labels: items,
-    datasets: [{
-      label: 'Preferred Products',
-      data: clicks,
-      backgroundColor: 'blue',
-      borderColor: 'orange'
-    }]
-  },
-  // options: {}
-});
-console.log('checking the number of clicks', clicks)
+function stats(){
+  for (var i = 0; i < allProducts.length; i++){
+    
+  }
+}
 
 
 picture.addEventListener('click', clickedProduct);
