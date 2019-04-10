@@ -6,6 +6,7 @@ var newSet = [];
 var clicksTotal = 0;
 var picture = document.getElementById('productList');
 var clickChart;
+var clickChart2;
 
 // constructor
 function Products(name, filePath) {
@@ -93,11 +94,12 @@ function populateChart(){
   // new variable to hold info from object for the chart.
   var items = [];
   var clicks = [];
-
+  var views = [];
   // loop to populate the array
   for (var i = 0; i < allProducts.length; i++) {
     items[i] = allProducts[i].name;
     clicks[i] = allProducts[i].clicks;
+    views[i] = allProducts[i].viewed;
   }
   // the following is from chart.js
   console.log(items, 'items');
@@ -108,37 +110,53 @@ function populateChart(){
     data: {
       labels: items,
       datasets: [{
-        label: 'Preferred Products',
+        label: 'Number of times Product Selected',
         data: clicks,
         backgroundColor: 'blue',
         borderColor: 'orange'
+      },
+      // adding views  to the same chart was inspired by Vinh Nguyen
+      {
+        label: 'Number of times Product Viewed',
+        data: views,
+        backgroundColor: 'green',
+        borderColor: 'orange'
       }]
     },
-    // options: {}
   });
+
   console.log('checking the number of clicks', clicks);
 }
 
 function stats(){
-  var prodStats = [];
-  var string;
-  var ulEl = document.getElementById('list');
-  for (var i = 0; i < allProducts.length; i++){
-    var clicked = allProducts[i].clicks;
-    var view = allProducts[i].viewed;
-    var item = allProducts[i].name;
-    var percent = Math.floor((clicked / view) * 100);
-    string = (`${item} was viewed ${view} times and was clicked on ${clicked} times. It had a selection rate of ${percent}%`);
-    prodStats.push(string);
+  var items = [];
+  var clicks = [];
+  var views = [];
+  var percent = [];
+  // loop to populate the array
+  for (var i = 0; i < allProducts.length; i++) {
+    items[i] = allProducts[i].name;
+    clicks[i] = allProducts[i].clicks;
+    views[i] = allProducts[i].viewed;
+    percent.push(Math.floor((clicks[i] / views[i]) * 100));
   }
-  for (var x = 0; x < prodStats.length; x++) {
-    // populates list
-    var liEL = document.createElement('li');
-    liEL.textContent = prodStats[x];
-    ulEl.appendChild(liEL);
-  }
+  // the following is from chart.js
+  var ctx = document.getElementById('clickChart2').getContext('2d');
+  clickChart2 = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: items,
+      datasets: [{
+        label: 'Percentage of Selection to Views',
+        data: percent,
+        backgroundColor: 'red',
+        borderColor: 'orange'
+      }
+      // adding views  to the same chart was inspired by Vinh Nguyen
+      ]
+    }
+  });
 }
-
 
 picture.addEventListener('click', clickedProduct);
 
@@ -147,4 +165,9 @@ document.getElementById('clickChart').addEventListener(clicksTotal, function(eve
     clickChart.update();
   }
 });
-console.log('this is a click end', clickChart);
+
+document.getElementById('clickChart2').addEventListener(clicksTotal, function(event) {
+  if (event.target.clicksTotal === 25) {
+    clickChart2.update();
+  }
+});
