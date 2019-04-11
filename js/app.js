@@ -133,8 +133,11 @@ function populateChart(){
         data: views,
         backgroundColor: 'green',
         borderColor: 'orange'
-      }]
+      }],
     },
+    options: {
+      responsive: false
+    }
   });
 
   console.log('checking the number of clicks', clicks);
@@ -166,6 +169,9 @@ function stats(){
       }
       // adding views  to the same chart was inspired by Vinh Nguyen
       ]
+    },
+    options: {
+      responsive: false
     }
   });
 }
